@@ -1,0 +1,51 @@
+from PySide2.QtWidgets import QApplication, QMainWindow, QPushButton, QPlainTextEdit, QMessageBox
+
+def handleCalc():
+    info = textEdit.toPlainText()
+    d={}
+    d2={}
+    for line in info.splitlines():
+        if not line.strip():
+            continue 
+        parts = line.split(' ')
+        parts = [p for p in parts if p]
+
+        s,g,k =parts
+        d[s]=g
+        d2[s]=k
+
+    ls = list(d.items())
+    ls1 = list(d2.items())
+
+    ls1.sort(key=lambda x:x[1],reverse=True)
+    s1,g1=ls1[0]
+    s2,g2=ls1[len(ls)-1]
+    print(ls1)
+    a=0
+    for i in d2.values():
+        a = a+int(i)
+    a = a/len(ls1)
+    b=0
+    for i in d.values():
+        if(i == '男'):
+            b = b+1
+    a =round(a,2)
+    QMessageBox.about(window,'统计结果',f"平均年龄为{a}\n男性人数为{b}")
+app = QApplication([])
+
+window = QMainWindow()
+window.resize(500,310)
+window.move(300,310)
+window.setWindowTitle('统计')
+
+textEdit = QPlainTextEdit(window)
+textEdit.setPlaceholderText('请输入姓名，性别 年龄')
+textEdit.move(10,25)
+textEdit.resize(300,500)
+
+button = QPushButton('统计',window)
+button.move(380,80)
+
+window.show()
+button.clicked.connect(handleCalc)
+app.exec_()
